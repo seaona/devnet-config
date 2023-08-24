@@ -6,7 +6,7 @@
     - The punks contract address is `0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb`
 
 2. Get the contract code from [Etherscan](https://etherscan.io/address/0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb#code)
-    - Identify which variable you want to change. In our case, we want to change the mapping where the token owners are set, so it is the `mapping(uint => address) punkIndexToAddress`
+    - Identify which variable you want to change. In our case, we want to change the mapping where the token owners are set, so it is the `mapping(uint => address) punkIndexToAddress` and the `mapping(address=>uint256) balanceOf`
 3. Get the storage layout
 
 ![storage](/CryptoPunksMarket.svg)
@@ -23,7 +23,7 @@ Now we can observe which methods we'll like to modify. In this case, I'll modify
     - Calculate the keccak256 (notice we should pass the value in lower case and input type hex). You can calculate it [here](https://emn178.github.io/online-tools/keccak_256.html)
     - The resulting slot is `0xbbc70db1b6c7afd11e79c0fb0051300458f1a3acb8ee9789d9b6b26c61ad9bc7`
 2. Set the value you want
-    - In this case we pass our address where we want to store the punk, again padded to 32 bytes `0x0000000000000000000000007Be9763a718C0539017E2Ab6fC42853b4aEeb6B`
+    - In this case we pass our address where we want to store the punk, again padded to 32 bytes `0x00000000000000000000000007be9763a718c0539017e2ab6fc42853b4aeeb6b`
 3. We are now ready to set the slot key value pair in our [devnet config file](./devnet-config.yml)
 
 ### balanceOf
