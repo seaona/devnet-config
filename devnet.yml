@@ -1,0 +1,30 @@
+# Learn how to configure DevNet templates using YAML here: https://docs.tenderly.co/devnets/yaml-template
+
+version: v0
+template:
+  name: seaona-punk
+  block-number: latest
+  visibility: TEAM
+  network-id: 1
+  execution:
+    chain-config:
+      chain-id: 1
+    block-gas-limit: 10000000
+    base-fee-per-gas: 1000000000
+  storage:
+    - address: 0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb # PUNK
+      slots:
+        - 0xbbc70db1b6c7afd11e79c0fb0051300458f1a3acb8ee9789d9b6b26c61ad9bc7: 0x00000000000000000000000007be9763a718c0539017e2ab6fc42853b4aeeb6b
+        - 0x65ca9b454c6468268ab14e3b8f391b420b731f3aa9ac0f4a1eb0a190aaebdcbe: 0x0000000000000000000000000000000000000000000000000000000000000001
+  balances:
+    - address: 0x07Be9763a718C0539017E2Ab6fC42853b4aEeb6B
+      amount: 5000000000000000000
+  erc20:
+    - contract: 0x6B175474E89094C44Da98b954EedeAC495271d0F # DAI
+      balances:
+        - address: 0x07Be9763a718C0539017E2Ab6fC42853b4aEeb6B
+          amount: 5000000000000000000
+    - contract: 0x4Fabb145d64652a948d72533023f6E7A623C7C53 # BUSD
+      balances:
+        - address: 0x07Be9763a718C0539017E2Ab6fC42853b4aEeb6B
+          amount: 5000000000000000000
