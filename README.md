@@ -57,15 +57,17 @@ Now we are going to validate that the sotrage has been correctly modified by usi
     ],
     "id":1
 }
+```
 
 - We get the following response, with our address as the owner of the NFT with id 1
+
 ```
 {
     "id": 1,
     "jsonrpc": "2.0",
     "result": "0x00000000000000000000000007be9763a718c0539017e2ab6fc42853b4aeeb6b"
 }
-
+```
 
 - Now we can also make a call for checking the reverse. We pass our address to get our tokens. In this case the request is:
 
