@@ -11,7 +11,7 @@
 
 ![storage](/CryptoPunksMarket.svg)
 
-Now we can observe which methods we'll like to modify. In this case, I'll modify the `punkIndexToAddress` mapping and the `balanceOf` mapping.
+Now we can observe which slots we'll like to modify. In this case, I'll modify the `punkIndexToAddress` mapping and the `balanceOf` mapping, corresponding to slots 10 and 11.
 
 ### punkIndexToAddress
 1. Get the slot address
@@ -24,7 +24,6 @@ Now we can observe which methods we'll like to modify. In this case, I'll modify
     - The resulting slot is `0xbbc70db1b6c7afd11e79c0fb0051300458f1a3acb8ee9789d9b6b26c61ad9bc7`
 2. Set the value you want
     - In this case we pass our address where we want to store the punk, again padded to 32 bytes `0x00000000000000000000000007be9763a718c0539017e2ab6fc42853b4aeeb6b`
-3. We are now ready to set the slot key value pair in our [devnet config file](./devnet-config.yml)
 
 ### balanceOf
 1. Get the slot address
@@ -37,12 +36,11 @@ Now we can observe which methods we'll like to modify. In this case, I'll modify
     - The resulting slot is `0x65ca9b454c6468268ab14e3b8f391b420b731f3aa9ac0f4a1eb0a190aaebdcbe`
 2. Set the value you want
     - In this case we pass the punk id we want to own (1), again padded to 32 bytes `0x0000000000000000000000000000000000000000000000000000000000000001`
-3. We are now ready to set the slot key value pair in our [devnet config file](./devnet-config.yml)
 
 
 ## Create the Config File
 Now we can create the Tenderly config YAML file. We can copy the default template and add our changes regarding the punk contract.
-
+[Here](./devnet.yml) is the result. I've also included some ERC20 and ETH balance to my account too.
 
 ## Validate results with eth_getStorageAt request
 Now we are going to validate that the sotrage has been correctly modified by using the `eth_getStorageAt` method on the Tenderly RPC we just setup
