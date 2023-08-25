@@ -1,20 +1,51 @@
 # Configurate your own Tenderly Devnet state
 
-**Goal**: in this repo we are going to modify CryptoPunks contract to get a Punk NFT into our desired address. We will use [Tenderly devnets](https://docs.tenderly.co/devnets/yaml-template) for that purpose.
+**Goal**: in this repo we are going to modify a couple of ERC721 contracts to become owners of an NFT into our desired address. We will use [Tenderly devnets](https://docs.tenderly.co/devnets/yaml-template) for that purpose.
 
+## ENS
+In this example we are going to make ourselves owners of the `vitalik.eth` NFT from the ENS contract and import the token into our MetaMask wallet.
+
+![vitalik](./vitalik-ens.gif)
+
+### ownerOf vitalik.eth
+1. Get the contract address
+    - The ENS contract address is `0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85`
+
+2. Get the contract code from [Etherscan](https://etherscan.io/address/0x57f1887a8bf19b14fc0df6fd9b2acc9af147ea85#readContract)
+    - Identify which variable you want to change. In our case, we want to change the mapping where the token owners are set, so it is the `mapping(uint256=> address)`
+3. Get the storage layout. I use sol2uml tool 
+    - `sol2uml storage ./ENS.sol -c BaseRegistrarImplementation`
+
+![storage](/BaseRegistrarImplementation.svg)
+
+4. Get the storage address
+    - The key is the token if, we choose the `vitalik.eth` domain, which corresponds to `tokenId` `79233663829379634837589865448569342784712482819484549289560981379859480642508` we need to convert it to hex and left pad this to a 32 bytes value (it's already a 32 bytes value)
+    `0xaf2caa1c2ca1d027f1ac823b529d0a67cd144264b2789fa2ea4d63a67c7103cc`
+    - The mapping is declared at storage slot position 5, padded to 32 bytes would be
+    `0x0000000000000000000000000000000000000000000000000000000000000005`
+    - Concatenating the 2 values we get
+    `0xaf2caa1c2ca1d027f1ac823b529d0a67cd144264b2789fa2ea4d63a67c7103cc0000000000000000000000000000000000000000000000000000000000000005`
+    - Calculate the keccak256 (notice we should pass the value in lower case and input type hex). You can calculate it [here](https://emn178.github.io/online-tools/keccak_256.html)
+    - The resulting slot is `0x2eaa2c9551f6c5af9914f3936eb972729afde59fbc6876afeb6236102e88ea1a`
+5. Set the value you want
+    - In this case we pass our address, again padded to 32 bytes `0x0000000000000000000000007Be9763a718C0539017E2Ab6fC42853b4aEeb6B`
+
+
+## CRYPTOPUNKS
 1. Get the contract address
     - The punks contract address is `0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb`
 
 2. Get the contract code from [Etherscan](https://etherscan.io/address/0xb47e3cd837ddf8e4c57f05d70ab865de6e193bbb#code)
     - Identify which variable you want to change. In our case, we want to change the mapping where the token owners are set, so it is the `mapping(uint => address) punkIndexToAddress` and the `mapping(address=>uint256) balanceOf`
-3. Get the storage layout
+3. Get the storage layout. I use sol2uml tool 
+    - `sol2uml storage ./CryptoPunksMarket.sol -c CryptoPunksMarket`
 
 ![storage](/CryptoPunksMarket.svg)
 
 Now we can observe which slots we'll like to modify. In this case, I'll modify the `punkIndexToAddress` mapping and the `balanceOf` mapping, corresponding to slots 10 and 11.
 
 ### punkIndexToAddress
-1. Get the slot address
+1. Get the storage address
     - The key is the crypto punk id. We choose to own the Crypto punk with id 1, so we need to left pad this to a 32 bytes value `0x0000000000000000000000000000000000000000000000000000000000000001`
     - The mapping is declared at storage slot position 10, padded to 32 bytes would be
     `0x000000000000000000000000000000000000000000000000000000000000000A`
@@ -26,7 +57,7 @@ Now we can observe which slots we'll like to modify. In this case, I'll modify t
     - In this case we pass our address where we want to store the punk, again padded to 32 bytes `0x00000000000000000000000007be9763a718c0539017e2ab6fc42853b4aeeb6b`
 
 ### balanceOf
-1. Get the slot address
+1. Get the storage address
     - The key is the address, we need to left pad this to a 32 bytes value `0x0000000000000000000000007Be9763a718C0539017E2Ab6fC42853b4aEeb6B`
     - The mapping is declared at storage slot position 11, padded to 32 bytes would be
     `0x000000000000000000000000000000000000000000000000000000000000000B`
