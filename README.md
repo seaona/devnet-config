@@ -2,6 +2,35 @@
 
 **Goal**: in this repo we are going to modify a couple of ERC721 contracts to become owners of an NFT into our desired address. We will use [Tenderly devnets](https://docs.tenderly.co/devnets/yaml-template) for that purpose.
 
+## CRYPTOKITTIES
+In this example we are going to make ourselves owners of the `1359295` Cryptokitty NFT and import the token into our MetaMask wallet.
+
+![kitty](./cryptokitty.png)
+
+### kittyIndexToOwner
+1. Get the contract address
+    - The Cryptokitties contract address is `0x06012c8cf97BEaD5deAe237070F9587f8E7A266d`
+
+2. Get the contract code from [Etherscan](https://etherscan.io/address/0x06012c8cf97bead5deae237070f9587f8e7a266d#code)
+    - Identify which variable you want to change. In our case, we want to change the mapping where the token owners are set, so it is the `mapping(uint256=> address)`
+3. Get the storage layout. I use sol2uml tool 
+    - `sol2uml storage ./Cryptokitties.sol -c KittyCore`
+
+![storage](/KittyCore.svg)
+
+4. Get the storage address
+    - The key is the token id we choose the `tokenId` `1359295` we need to convert it to hex and left pad this to a 32 bytes value (it's already a 32 bytes value)
+    `0x000000000000000000000000000000000000000000000000000000000014BDBF`
+    - The mapping is declared at storage slot position 7, padded to 32 bytes would be
+    `0x0000000000000000000000000000000000000000000000000000000000000007`
+    - Concatenating the 2 values we get
+    `0x000000000000000000000000000000000000000000000000000000000014bdbf0000000000000000000000000000000000000000000000000000000000000007`
+    - Calculate the keccak256 (notice we should pass the value in lower case and input type hex). You can calculate it [here](https://emn178.github.io/online-tools/keccak_256.html)
+    - The resulting slot is `0xd9fbdcbb8ce2d4417e6ad68850ec200e7d37b49be27a4bff9848b9f2d04aa79a`
+5. Set the value you want
+    - In this case we pass our address, again padded to 32 bytes `0x0000000000000000000000007Be9763a718C0539017E2Ab6fC42853b4aEeb6B`
+
+
 ## ENS
 In this example we are going to make ourselves owners of the `vitalik.eth` NFT from the ENS contract and import the token into our MetaMask wallet.
 
